@@ -19,6 +19,7 @@ export const Avatar = ({ children, isSelected = false, onClick }: Props) => {
         textAlign: "center",
         lineHeight: "1.8",
         userSelect: "none",
+        cursor: "pointer",
       }}
       onClick={() => onClick(`${children}`)}
     >
