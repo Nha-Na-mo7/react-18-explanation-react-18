@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, startTransition } from "react";
 import { Avatar } from "./Avatar";
 
 type Task = {
@@ -6,15 +6,13 @@ type Task = {
   title: string;
   assignee: string;
 };
-
 const member = {
   a: "A",
   b: "B",
   c: "C",
 };
-
 const generateDummyTasks = (): Task[] => {
-  return Array(1000)
+  return Array(10000)
     .fill("")
     .map((_, index) => {
       const addedIndex = index + 1;
@@ -30,9 +28,7 @@ const generateDummyTasks = (): Task[] => {
       };
     });
 };
-
 const tasks = generateDummyTasks();
-
 const filteringAssignee = (assignee: string) => {
   if (assignee === "") return tasks;
   return tasks.filter((tasks) => tasks.assignee === assignee);
@@ -44,7 +40,9 @@ export const Transition = () => {
 
   const onClickAssignee = (assignee: string) => {
     setSelectedAssignee(assignee);
-    setTaskList(filteringAssignee(assignee));
+    startTransition(() => {
+      setTaskList(filteringAssignee(assignee));
+    });
   };
 
   return (
