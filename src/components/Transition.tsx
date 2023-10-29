@@ -1,7 +1,8 @@
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { Avatar } from "./Avatar";
+import { TaskList } from "./TaskList";
 
-type Task = {
+export type Task = {
   id: number;
   title: string;
   assignee: string;
@@ -35,16 +36,13 @@ const filteringAssignee = (assignee: string) => {
 };
 
 export const Transition = () => {
-  const [isPending, startTransition] = useTransition();
-
   const [selectedAssignee, setSelectedAssignee] = useState<string>("");
   const [taskList, setTaskList] = useState<Task[]>(tasks);
+  const [isShowList, setIsShowList] = useState<boolean>(false);
 
   const onClickAssignee = (assignee: string) => {
     setSelectedAssignee(assignee);
-    startTransition(() => {
-      setTaskList(filteringAssignee(assignee));
-    });
+    setTaskList(filteringAssignee(assignee));
   };
 
   return (
@@ -79,23 +77,10 @@ export const Transition = () => {
       <button type="button" onClick={() => onClickAssignee("")}>
         リセット
       </button>
-
-      {taskList.map((task) => {
-        return (
-          <div
-            key={task.id}
-            style={{
-              width: "380px",
-              margin: "auto",
-              backgroundColor: "lavender",
-              opacity: isPending ? "0.3" : "1",
-            }}
-          >
-            <p>タイトル: {task.title}</p>
-            <p>担当者: {task.assignee}</p>
-          </div>
-        );
-      })}
+      <br />
+      <br />
+      <button onClick={() => setIsShowList(!isShowList)}>表示/非表示</button>
+      {isShowList && <TaskList taskList={taskList} />}
     </div>
   );
 };
